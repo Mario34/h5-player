@@ -1,0 +1,115 @@
+@use "sass:math";
+
+.h5-player-root {
+
+}
+
+.h5-player-video {
+  width: 100%;
+}
+
+$height: 44px;
+
+.h5-player-controls {
+  height: $height;
+  background-color: #888;
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  &__play-btn {
+    width: $height;
+    height: $height;
+    position: relative;
+
+    $root: selector-parse(&);
+
+    &-icon {
+      height: 22px;
+      width: 22px;
+      transition: opacity 100ms, transform 300ms;
+      position: absolute;
+      top: 11px;
+      left: 11px;
+      opacity: 0;
+      z-index: 0;
+      transform: scale(0.6, 0.6);
+
+      &.play {
+        opacity: 1;
+        transform: scale(1, 1);
+        z-index: 1;
+      }
+
+      svg {
+        fill: #fff;
+      }
+    }
+
+    &.is-play {
+      #{$root}-icon {
+        opacity: 1;
+        transform: scale(1, 1);
+        z-index: 1;
+
+        &.pause {
+          opacity: 1;
+          transform: scale(1, 1);
+          z-index: 1;
+        }
+
+        &.play {
+          opacity: 0;
+          transform: scale(0.6, 0.6);
+          z-index: 0;
+        }
+      }
+    }
+  }
+
+  &__time {
+    font-size: 12px;
+    color: #fff;
+    margin-right: 12px;
+    white-space: normal;
+    line-height: $height;
+    width: 30px;
+  }
+}
+
+.h5-player-progress {
+  $bar-height: 2px;
+  $switch-size: 8px;
+  $active-color: #f99;
+
+  height: $bar-height;
+  flex-grow: 1;
+  position: relative;
+  padding: 0 math.div($switch-size, 2);
+  box-sizing: border-box;
+  display: flex;
+
+  &__base-bar {
+    height: $bar-height;
+    background-color: #fff;
+    border-radius: 2px;
+    flex-grow: 1;
+  }
+  
+  &__active-bar {
+    height: $bar-height;
+    position: absolute;
+    border-radius: 2px;
+    top: 0;
+    background-color: $active-color;
+  }
+  
+  &__switch {
+    height: $switch-size;
+    width: $switch-size;
+    border-radius: math.div($switch-size, 2);
+    position: absolute;
+    top: math.div(($switch-size - $bar-height), -2);
+    background-color: mix(#fff, transparent, 90);
+  }
+}
