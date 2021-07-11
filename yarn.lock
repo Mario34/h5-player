@@ -119,11 +119,6 @@ normalize-path@^3.0.0, normalize-path@~3.0.0:
   resolved "https://registry.yarnpkg.com/normalize-path/-/normalize-path-3.0.0.tgz#0dcd69ff23a1c9b11fd0978316644a0388216a65"
   integrity sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==
 
-number-precision@^1.5.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/number-precision/-/number-precision-1.5.0.tgz#eca1e3657cc7de3778987f2d22aa9dea4be238d5"
-  integrity sha512-CxmQK1FFj3G3YXS4PDZSz3+IvtNESpuMwK6JY+y4IIDBbyY1ldkvk2nqBzDJj+EKFXZrrmL/fObqtSoB8b/jZQ==
-
 path-parse@^1.0.6:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/path-parse/-/path-parse-1.0.7.tgz#fbc114b60ca42b30d9daf5858e4bd68bbedb6735"

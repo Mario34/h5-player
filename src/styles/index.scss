@@ -16,14 +16,16 @@ $height: 44px;
   display: flex;
   align-items: center;
   position: relative;
-
+  user-select: none;
+  
   &__play-btn {
     width: $height;
     height: $height;
     position: relative;
-
+    cursor: pointer;
+    
     $root: selector-parse(&);
-
+    
     &-icon {
       height: 22px;
       width: 22px;
@@ -67,6 +69,27 @@ $height: 44px;
     }
   }
 
+  &__full-screen-btn {
+    width: $height;
+    height: $height;
+    position: relative;
+    
+    $root: selector-parse(&);
+    
+    &-icon {
+      height: 22px;
+      width: 22px;
+      position: absolute;
+      cursor: pointer;
+      top: 11px;
+      left: 11px;
+
+      svg {
+        fill: #fff;
+      }
+    }
+  }
+
   &__time {
     font-size: 12px;
     color: #fff;
@@ -75,11 +98,21 @@ $height: 44px;
     line-height: $height;
     width: 30px;
   }
+
+  &__remainder {
+    font-size: 12px;
+    color: #fff;
+    margin-right: 12px;
+    margin-left: 12px;
+    white-space: normal;
+    line-height: $height;
+    width: 30px;
+  }
 }
 
 .h5-player-progress {
   $bar-height: 2px;
-  $switch-size: 8px;
+  $switch-size: 16px;
   $active-color: #f99;
 
   height: $bar-height;
@@ -110,6 +143,8 @@ $height: 44px;
     border-radius: math.div($switch-size, 2);
     position: absolute;
     top: math.div(($switch-size - $bar-height), -2);
+    left: 0;
     background-color: mix(#fff, transparent, 90);
+    cursor: pointer;
   }
 }

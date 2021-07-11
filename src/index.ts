@@ -1,10 +1,11 @@
 import { Video } from './components/video'
 import { Controls } from './components/controls'
+import type { HP } from './type'
 
 type Selector = string | Element
 
-interface Config {
-  autoPlay: boolean
+interface Config extends HP.VideoOption {
+  fullscreen?: boolean
 }
 
 interface InitOption {
@@ -15,11 +16,7 @@ interface InitOption {
   /**
    * 配置
   */
-  config?: Partial<Config>
-}
-
-const DefaultConfig: Config = {
-  autoPlay: false,
+  config: Config
 }
 
 export function InitPlayer(option: InitOption) {
@@ -37,9 +34,29 @@ export function InitPlayer(option: InitOption) {
     rootElm = elm
   }
   rootElm.classList.add('h5-player-root')
-  const video = new Video()
+  const video = new Video(option.config)
   const controls = new Controls({ ctx: video.elm })
 
   rootElm.appendChild(video.elm)
   rootElm.appendChild(controls.elm)
+
+  return {
+    destroy() {
+      controls.destroy()
+    },
+    updateConfig(config: Config) {
+      if('src' in config) {
+        video.elm.src = config.src
+      }
+      if('autoplay' in config) {
+        video.elm.autoplay = !!config.autoplay
+      }
+      if('fullscreen' in config) {
+        controls.fullscreen()
+      }
+      if('muted' in config) {
+        video.elm.muted = !!config.muted
+      }
+    }
+  }
 }

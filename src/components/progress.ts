@@ -1,8 +1,8 @@
 import { createDiv, prefix } from '../utils/dom'
 import { isUndef } from '../utils/type'
-import type { ProgressType } from '../type'
+import type { HP } from '../type'
 
-const defConfig: ProgressType.Config = {
+const defConfig: HP.ProgressType.Config = {
   start: 0,
   end: 120,
   step: 1,
@@ -13,11 +13,11 @@ export class Progress {
   private activeBar: HTMLDivElement
   private baseBar: HTMLDivElement
   private switch: HTMLDivElement
-  private dragPoint: ProgressType.Point = { x: 0, y: 0 }
-  private config: ProgressType.Config
+  private dragPoint: HP.ProgressType.Point = { x: 0, y: 0 }
+  private config: HP.ProgressType.Config
   private currentValue: number = 0
 
-  constructor(config?: Partial<ProgressType.Config>) {
+  constructor(config?: Partial<HP.ProgressType.Config>) {
     this.config = { ...defConfig, ...config }
     this.elm = createDiv(prefix('progress'))
     this.activeBar = createDiv(prefix('progress__active-bar'))
@@ -26,7 +26,7 @@ export class Progress {
     this.init()
   }
 
-  public updateConfig(config: Partial<ProgressType.Config>) {
+  public updateConfig(config: Partial<HP.ProgressType.Config>) {
     this.config = { ...this.config, ...config }
   }
 
@@ -52,7 +52,7 @@ export class Progress {
     this.elm.appendChild(this.activeBar)
     this.elm.appendChild(this.baseBar)
     this.elm.appendChild(this.switch)
-    if ('touchend' in document) {
+    if ('ontouchend' in document) {
       this.switch.addEventListener('touchstart', this.onTouchstart)
     } else {
       this.switch.addEventListener('mousedown', this.onMousedown)
@@ -64,13 +64,8 @@ export class Progress {
     const tRect = target.getBoundingClientRect()
     const touch = e.touches[0]
     this.dragPoint = { x: touch.pageX - tRect.left, y: touch.pageY - tRect.top }
-    if ('touchend' in document) {
-      document.addEventListener('touchmove', this.onTouchmove)
-      document.addEventListener('touchend', this.onTouchend)
-    } else {
-      document.addEventListener('mousemove', this.onMousemove)
-      document.addEventListener('mouseup', this.onMouseup)
-    }
+    document.addEventListener('touchmove', this.onTouchmove)
+    document.addEventListener('touchend', this.onTouchend)
   }
 
   private onTouchend = () => {
@@ -113,6 +108,7 @@ export class Progress {
   }
 
   private onMousedown = (e: MouseEvent) => {
+    this.config.onPlay?.()
     this.dragPoint = { x: e.offsetX, y: e.offsetY }
     document.addEventListener('mousemove', this.onMousemove)
     document.addEventListener('mouseup', this.onMouseup)
@@ -126,7 +122,7 @@ export class Progress {
   private onMousemove = (e: MouseEvent) => {
     this.config.onPause?.()
     const elmRect = this.elm.getBoundingClientRect()
-    const left = e.offsetX - elmRect.left - this.dragPoint.x
+    const left = e.clientX - elmRect.left - this.dragPoint.x
     const sliderLength = elmRect.width - this.switch.offsetWidth
     const { start, end, step } = this.config
     const range = end - start
@@ -154,5 +150,13 @@ export class Progress {
       return value - d + step
     }
     return value - d
+  }
+
+  public destroy() {
+    if ('ontouchend' in document) {
+      this.switch.removeEventListener('touchstart', this.onTouchstart)
+    } else {
+      this.switch.removeEventListener('mousedown', this.onMousedown)
+    }
   }
 }
