@@ -43,11 +43,20 @@ export class Progress {
     return this.currentValue
   }
 
+  public reset() {
+    this.currentValue = 0
+    this.moveSwitchX(0)
+  }
+
   private init() {
     this.elm.appendChild(this.activeBar)
     this.elm.appendChild(this.baseBar)
     this.elm.appendChild(this.switch)
-    this.switch.addEventListener('touchstart', this.onTouchstart)
+    if ('touchend' in document) {
+      this.switch.addEventListener('touchstart', this.onTouchstart)
+    } else {
+      this.switch.addEventListener('mousedown', this.onMousedown)
+    }
   }
 
   private onTouchstart = (e: TouchEvent) => {
@@ -55,8 +64,13 @@ export class Progress {
     const tRect = target.getBoundingClientRect()
     const touch = e.touches[0]
     this.dragPoint = { x: touch.pageX - tRect.left, y: touch.pageY - tRect.top }
-    document.addEventListener('touchmove', this.onTouchmove)
-    document.addEventListener('touchend', this.onTouchend)
+    if ('touchend' in document) {
+      document.addEventListener('touchmove', this.onTouchmove)
+      document.addEventListener('touchend', this.onTouchend)
+    } else {
+      document.addEventListener('mousemove', this.onMousemove)
+      document.addEventListener('mouseup', this.onMouseup)
+    }
   }
 
   private onTouchend = () => {
@@ -98,16 +112,40 @@ export class Progress {
     this.activeBar.style.width = `${100 * x / this.elm.offsetWidth}%`
   }
 
-  private onMousedown = () => {
-
+  private onMousedown = (e: MouseEvent) => {
+    this.dragPoint = { x: e.offsetX, y: e.offsetY }
+    document.addEventListener('mousemove', this.onMousemove)
+    document.addEventListener('mouseup', this.onMouseup)
   }
 
   private onMouseup = () => {
-
+    document.removeEventListener('mousemove', this.onMousemove)
+    document.removeEventListener('mouseup', this.onMouseup)
   }
 
-  private onMousemove = () => {
-
+  private onMousemove = (e: MouseEvent) => {
+    this.config.onPause?.()
+    const elmRect = this.elm.getBoundingClientRect()
+    const left = e.offsetX - elmRect.left - this.dragPoint.x
+    const sliderLength = elmRect.width - this.switch.offsetWidth
+    const { start, end, step } = this.config
+    const range = end - start
+    let stepValue = 0
+    if (left <= 0) {
+      this.moveSwitchX(0)
+      stepValue = start
+    } else if (left < elmRect.width - this.switch.offsetWidth) {
+      stepValue = this.getStepValue(range * left / sliderLength, step)
+      this.moveSwitchX(left)
+    } else if (left >= elmRect.width - this.switch.offsetWidth) {
+      this.moveSwitchX(elmRect.width - this.switch.offsetWidth)
+      stepValue = end
+    }
+    if (this.currentValue !== stepValue) {
+      this.config.onChange?.(stepValue)
+    }
+    this.currentValue = stepValue
+    return false
   }
 
   private getStepValue(value: number, step: number) {
