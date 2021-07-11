@@ -108,15 +108,17 @@ export class Progress {
   }
 
   private onMousedown = (e: MouseEvent) => {
-    this.config.onPlay?.()
     this.dragPoint = { x: e.offsetX, y: e.offsetY }
     document.addEventListener('mousemove', this.onMousemove)
     document.addEventListener('mouseup', this.onMouseup)
   }
 
   private onMouseup = () => {
+    this.config.onPlay?.()
+    this.dragPoint = { x: 0, y: 0 }
     document.removeEventListener('mousemove', this.onMousemove)
     document.removeEventListener('mouseup', this.onMouseup)
+    this.updateValue()
   }
 
   private onMousemove = (e: MouseEvent) => {
