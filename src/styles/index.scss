@@ -1,45 +1,43 @@
 @use "sass:math";
 
 .h5-player-root {
-
 }
 
 .h5-player-video {
   width: 100%;
 }
 
-$height: 44px;
-
 .h5-player-controls {
+  $height: 34px;
+
   height: $height;
   background-color: #888;
   display: flex;
   align-items: center;
   position: relative;
   user-select: none;
-  
+
   &__play-btn {
     width: $height;
     height: $height;
     position: relative;
     cursor: pointer;
-    
+
     $root: selector-parse(&);
-    
+
     &-icon {
       height: 22px;
       width: 22px;
       transition: opacity 100ms, transform 300ms;
       position: absolute;
-      top: 11px;
-      left: 11px;
+      top: 50%;
+      left: 50%;
       opacity: 0;
       z-index: 0;
-      transform: scale(0.6, 0.6);
+      transform: translate(-50%, -50%);
 
       &.play {
         opacity: 1;
-        transform: scale(1, 1);
         z-index: 1;
       }
 
@@ -51,18 +49,15 @@ $height: 44px;
     &.is-play {
       #{$root}-icon {
         opacity: 1;
-        transform: scale(1, 1);
         z-index: 1;
 
         &.pause {
           opacity: 1;
-          transform: scale(1, 1);
           z-index: 1;
         }
 
         &.play {
           opacity: 0;
-          transform: scale(0.6, 0.6);
           z-index: 0;
         }
       }
@@ -73,16 +68,16 @@ $height: 44px;
     width: $height;
     height: $height;
     position: relative;
-    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     $root: selector-parse(&);
-    
+
     &-icon {
       height: 22px;
       width: 22px;
-      position: absolute;
       cursor: pointer;
-      top: 11px;
-      left: 11px;
 
       svg {
         fill: #fff;
@@ -128,7 +123,7 @@ $height: 44px;
     border-radius: 2px;
     flex-grow: 1;
   }
-  
+
   &__active-bar {
     height: $bar-height;
     position: absolute;
@@ -136,7 +131,7 @@ $height: 44px;
     top: 0;
     background-color: $active-color;
   }
-  
+
   &__switch {
     height: $switch-size;
     width: $switch-size;

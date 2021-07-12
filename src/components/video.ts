@@ -1,8 +1,8 @@
 import { createElm, prefix } from '../utils/dom'
 import type { HP } from '../type'
 
-const DefaultOption = {
-  src: 'https://media.w3.org/2010/05/sintel/trailer.mp4',
+const DefaultOption: HP.VideoOption = {
+  src: '',
   autoplay: false,
   muted: false,
 }
@@ -15,6 +15,9 @@ export class Video {
     this.elm = createElm('video', prefix('video'))
     this.elm.src = mo.src
     this.elm.controls = false
+    if (mo.poster) {
+      this.elm.poster = mo.poster
+    }
     this.elm.autoplay = !!mo.autoplay
     this.elm.muted = !!mo.muted
     this.elm.playsInline = true // 禁止默认的全屏

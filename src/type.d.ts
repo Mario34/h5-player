@@ -24,5 +24,6 @@ export namespace HP {
     src: string
     autoplay?: boolean
     muted?: boolean
+    poster?: string
   }
 }
