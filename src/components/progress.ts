@@ -16,7 +16,7 @@ export class Progress {
   private dragPoint: HP.ProgressType.Point = { x: 0, y: 0 }
   private config: HP.ProgressType.Config
   private currentValue: number = 0
-
+  
   constructor(config?: Partial<HP.ProgressType.Config>) {
     this.config = { ...defConfig, ...config }
     this.elm = createDiv(prefix('progress'))
@@ -66,6 +66,7 @@ export class Progress {
     this.dragPoint = { x: touch.pageX - tRect.left, y: touch.pageY - tRect.top }
     document.addEventListener('touchmove', this.onTouchmove)
     document.addEventListener('touchend', this.onTouchend)
+    this.config.clearTimer?.()
   }
 
   private onTouchend = () => {
@@ -98,6 +99,7 @@ export class Progress {
     if (this.currentValue !== stepValue) {
       this.config.onChange?.(stepValue)
     }
+    this.config.onShowControl?.()
     this.currentValue = stepValue
     return false
   }
@@ -111,6 +113,7 @@ export class Progress {
     this.dragPoint = { x: e.offsetX, y: e.offsetY }
     document.addEventListener('mousemove', this.onMousemove)
     document.addEventListener('mouseup', this.onMouseup)
+    this.config.clearTimer?.()
   }
 
   private onMouseup = () => {
@@ -119,6 +122,7 @@ export class Progress {
     document.removeEventListener('mousemove', this.onMousemove)
     document.removeEventListener('mouseup', this.onMouseup)
     this.updateValue()
+    this.config.onShowControl?.()
   }
 
   private onMousemove = (e: MouseEvent) => {

@@ -13,6 +13,7 @@ export class Controls {
   private fullBtn: Element
   private timeElm: Element
   private remainderElm: Element
+  private showTimer: number = 0
 
   constructor({ ctx }: { ctx: HTMLVideoElement }) {
     this.elm = createDiv(prefix('controls'))
@@ -25,6 +26,8 @@ export class Controls {
       onChange: this.onProgressChange,
       onPause: this.onPause,
       onPlay: this.onPlay,
+      clearTimer: this.clearTimer,
+      onShowControl: this.show,
     })
     this.init()
   }
@@ -117,6 +120,18 @@ export class Controls {
 
   public fullscreen() {
     this.onClickFullScreen()
+  }
+
+  public show = () => {
+    this.clearTimer()
+    this.elm.classList.add('show')
+    this.showTimer = setTimeout(() => {
+      this.elm.classList.remove('show')
+    }, 5000)
+  }
+
+  public clearTimer = () => {
+    clearTimeout(this.showTimer)
   }
 
   public destroy() {

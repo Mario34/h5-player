@@ -1,21 +1,36 @@
 @use "sass:math";
 
 .h5-player-root {
+  position: relative;
+  overflow: hidden;
 }
 
 .h5-player-video {
   width: 100%;
+  display: block;
+  position: relative;
 }
 
 .h5-player-controls {
   $height: 34px;
 
   height: $height;
-  background-color: #888;
+  background: mix(transparent, #000, 80);
+  background: linear-gradient(transparent, mix(transparent, #000, 60));
   display: flex;
   align-items: center;
   position: relative;
   user-select: none;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  transition: transform 200ms;
+  transform: translate(0, 2 * $height);
+  z-index: 1;
+
+  &.show {
+    transform: translate(0, 0);
+  }
 
   &__play-btn {
     width: $height;
@@ -107,7 +122,7 @@
 
 .h5-player-progress {
   $bar-height: 2px;
-  $switch-size: 16px;
+  $switch-size: 12px;
   $active-color: #f99;
 
   height: $bar-height;

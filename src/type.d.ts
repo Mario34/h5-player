@@ -13,6 +13,8 @@ export namespace HP {
       onChange?: Change
       onPause?: () => void
       onPlay?: () => void
+      clearTimer?: () => void
+      onShowControl?: () => void
     }
 
     interface Change {

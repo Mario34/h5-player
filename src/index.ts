@@ -40,9 +40,17 @@ export function InitPlayer(option: InitOption) {
   rootElm.appendChild(video.elm)
   rootElm.appendChild(controls.elm)
 
+  const onClickVideo = () => {
+    console.log('click video')
+    controls.show()
+  }
+
+  video.elm.addEventListener('click', onClickVideo)
+
   return {
     destroy() {
       controls.destroy()
+      video.elm.removeEventListener('click', onClickVideo)
     },
     updateConfig(config: Config) {
       if('src' in config) {
